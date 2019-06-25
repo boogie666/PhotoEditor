@@ -2,13 +2,21 @@ package com.boogie666.photoeditor.controllers;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.KeyStroke;
 
 import com.boogie666.photoeditor.model.AppModel;
 
-public class LigthenController implements ActionListener {
+public class LigthenController extends AbstractAction implements ActionListener {
 	
 	private AppModel model;
 	public LigthenController(AppModel model) {
+		super("Lighten");
+		this.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_L, KeyEvent.CTRL_DOWN_MASK));
+		
 		this.model = model;
 	}
 	@Override

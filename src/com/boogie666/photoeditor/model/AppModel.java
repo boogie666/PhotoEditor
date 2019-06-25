@@ -1,6 +1,7 @@
 package com.boogie666.photoeditor.model;
 
 import java.awt.Color;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,15 +9,32 @@ import java.util.Stack;
 
 public class AppModel {
 	private Stack<BufferedImage> images;
-	private List<UpdateListener> updateListeners;
+	private List<AppModelListener> updateListeners;
 	
 	public AppModel(BufferedImage image) {
 		this.images = new Stack<BufferedImage>();
 		this.images.push(image);
-		this.updateListeners = new ArrayList<UpdateListener>();
+		this.updateListeners = new ArrayList<AppModelListener>();
 	}
 	
-	public void ligthen() {
+	public void crop(Rectangle rect) {
+		BufferedImage image = this.images.peek();
+		BufferedImage nextImage = new BufferedImage((int) rect.getWidth(), (int)rect.getHeight(), image.getType());
+		
+		int x = 0;
+		
+		for(int i = rect.x; i < rect.getWidth() + rect.x; i++, x++) {
+
+			int y = 0;
+			for(int j = rect.y; j < rect.getHeight() + rect.y; j++, y++) {
+				nextImage.setRGB(x,y, image.getRGB(i, j));
+			}
+		}
+		this.images.push(nextImage);
+		fireUpdate();
+	}
+	
+	public void ligthen() {		
 		BufferedImage image = this.images.peek();
 		BufferedImage nextImage = new BufferedImage(image.getWidth(), image.getHeight(), image.getType());
 		
@@ -54,12 +72,12 @@ public class AppModel {
 	}
 	
 	private void fireUpdate() {
-		for(UpdateListener up: this.updateListeners) {
+		for(AppModelListener up: this.updateListeners) {
 			up.onUpdate();
 		}
 	}
 
-	public void addUpdateListener(UpdateListener updateListener) {
+	public void addUpdateListener(AppModelListener updateListener) {
 		this.updateListeners.add(updateListener);
 	}
 

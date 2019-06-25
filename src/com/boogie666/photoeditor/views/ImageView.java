@@ -1,4 +1,4 @@
-package com.boogie666.photoeditor;
+package com.boogie666.photoeditor.views;
 
 import java.awt.Component;
 import java.awt.Dimension;
